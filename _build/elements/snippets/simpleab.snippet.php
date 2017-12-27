@@ -71,7 +71,12 @@ if ($test instanceof sabTest && ($test->get('type') == 'modChunk')) {
      */
     $chunk = $modx->getObject('modChunk', $chunkId);
     if ($chunk instanceof modChunk) {
-        return $chunk->process($scriptProperties);
+        $modx->getService('pdoTools', 'pdoTools');
+        if ($modx->pdoTools) {
+            return $modx->pdoTools->getChunk($chunk->get('name'));
+        } else {
+            return $chunk->process($scriptProperties);
+        }
     }
 
     $modx->log(modX::LOG_LEVEL_ERROR,'[SimpleAB] Chunk with ID ' . $chunkId . ' not found for test ' . $test->get('id') . ' on resource ' . $modx->resource->get('id'));
